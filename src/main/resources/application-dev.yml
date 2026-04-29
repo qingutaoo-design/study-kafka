@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      auto-offset-reset: earliest
+    producer:
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      #默认的key序列化器是StringSerializer，如果不指定，默认就是StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    template:
+      default-topic: default-topic

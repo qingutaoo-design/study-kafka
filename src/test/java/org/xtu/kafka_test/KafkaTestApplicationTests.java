@@ -49,6 +49,11 @@ class KafkaTestApplicationTests {
         for (int i = 0; i < 3; i++) {
             eventsProducer.sendMessage8();
         }
-
     }
+
+        @Test
+        void testMessage9 () {
+            eventsProducer.sendMessage9();
+        }
 }
+

@@ -1,5 +1,6 @@
 package org.xtu.kafka_test.Producer;
 
+import cn.hutool.json.JSONUtil;
 import jakarta.annotation.Resource;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -109,10 +110,21 @@ public class EventsProducer {
     public void sendMessage8(){
         User user = User.builder().age(18).name("xtu").phone("123456789").build();
 
+
             kafkaTemplate2.send("hello-topic2",user);
 
 
 
     }
 
+    public void sendMessage9(){
+        User user = User.builder().age(18).name("xtu").phone("123456789").build();
+
+        String userJSON = JSONUtil.toJsonStr(user);
+
+        kafkaTemplate.send("hello-topic",userJSON);
+
+
+
+    }
 }
