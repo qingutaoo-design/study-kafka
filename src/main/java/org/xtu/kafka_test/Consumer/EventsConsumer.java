@@ -1,5 +1,6 @@
 package org.xtu.kafka_test.Consumer;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -14,11 +15,13 @@ public class EventsConsumer {
                         @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
                         @Header(KafkaHeaders.RECEIVED_KEY) String key,
-                        @Header("header1") String value1) {
+                        @Header("header1") String value1,
+                        ConsumerRecord consumerRecord) {
         System.out.println("Received event: " + Event);
 
         System.out.println("topic: " + topic + ", partition: " + partition + ", key: " + key + ", value1: " + value1);
 
+        System.out.println("ConsumerRecord: " + consumerRecord.toString());
 
     }
 
