@@ -1,0 +1,15 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9094
+    #?????
+    consumer:
+      auto-offset-reset: earliest
+
+    #?????
+    template:
+      default-topic: default-topic
+    producer:
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+
