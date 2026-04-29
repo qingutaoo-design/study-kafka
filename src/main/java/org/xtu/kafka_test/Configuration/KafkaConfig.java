@@ -41,7 +41,7 @@ public class KafkaConfig {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,keySerializer);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,valueSerializer);
         props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RoundRobinPartitioner.class);
-        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, kafkaInterceptor.getClass());
+        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, kafkaInterceptor.getClass().getName());
         return props;
     }
 
