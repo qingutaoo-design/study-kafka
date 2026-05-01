@@ -2,6 +2,8 @@ spring:
   profiles:
     active: dev
   kafka:
+    listener:
+      ack-mode: manual
     bootstrap-servers: ${spring.kafka.bootstrap-servers}
     #?????
     consumer:
@@ -15,6 +17,8 @@ spring:
 #        key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: ${spring.kafka.producer.value-serializer}
       key-serializer: ${spring.kafka.producer.key-serializer}
+
+
 kafka:
   topic:
     name: hello-topic
