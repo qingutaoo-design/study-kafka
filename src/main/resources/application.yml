@@ -4,12 +4,10 @@ spring:
   kafka:
     listener:
       ack-mode: manual
+      #设置监听器一次监听一组消息
+      type: batch
     bootstrap-servers: ${spring.kafka.bootstrap-servers}
     #?????
-    consumer:
-      #默认消费最新消息，如果没有这个配置，默认是latest
-      auto-offset-reset: ${spring.kafka.consumer.auto-offset-reset}
-
     #?????
     template:
       default-topic: ${spring.kafka.template.default-topic}
@@ -18,10 +16,15 @@ spring:
 #        key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: ${spring.kafka.producer.value-serializer}
       key-serializer: ${spring.kafka.producer.key-serializer}
+    consumer:
+      #设置监听一组的最大数
+      max-poll-records: 20
+        #默认消费最新消息，如果没有这个配置，默认是latest
+      auto-offset-reset: ${spring.kafka.consumer.auto-offset-reset}
 kafka:
   topic:
-    name: hello-topic
+    name: hello-topic2
   consumer:
-    group-id: helloGroup3
+    group-id: batchgroup
 
 

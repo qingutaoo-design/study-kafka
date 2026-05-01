@@ -12,6 +12,9 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.xtu.kafka_test.Entity.User;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class EventsConsumer {
 
@@ -85,22 +88,39 @@ public class EventsConsumer {
         }
     }
 
-    @KafkaListener(groupId = "${kafka.consumer.group-id}",
-    topicPartitions = {
-            @TopicPartition(topic = "${kafka.topic.name}",
-            partitions = {"0","1","2"},
-            partitionOffsets = {
-                    //指定分区的初始offset，默认是latest,不受消费者组offset的影响，每次重启消费者都会从指定的offset开始消费
-                    @PartitionOffset(partition = "3", initialOffset = "2"),
-                    @PartitionOffset(partition = "4", initialOffset = "2")
-            })
-    })
+//    @KafkaListener(groupId = "${kafka.consumer.group-id}",
+//    topicPartitions = {
+//            @TopicPartition(topic = "${kafka.topic.name}",
+//            partitions = {"0","1","2"},
+//            partitionOffsets = {
+//                    //指定分区的初始offset，默认是latest,不受消费者组offset的影响，每次重启消费者都会从指定的offset开始消费
+//                    @PartitionOffset(partition = "3", initialOffset = "2"),
+//                    @PartitionOffset(partition = "4", initialOffset = "2")
+//            })
+//    })
     public void onEvent5(String Event,
                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                          Acknowledgment ack) {
         try {
             User user = JSONUtil.toBean(Event, User.class);
             System.out.println("Received event5(user): " + user);
+            ack.acknowledge();//手动ack，提交offset
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}")
+    public void onEvent6(List<ConsumerRecord<String,String>> Events, Acknowledgment ack) {
+        try {
+            List<User> collect = Events.stream().map(Event -> {
+                String value = Event.value();
+                User user = JSONUtil.toBean(value, User.class);
+                return user;
+            }).collect(Collectors.toList());
+
+            System.out.println( "一组消费记录：" + collect + "，数量：" + collect.size());
+
             ack.acknowledge();//手动ack，提交offset
         } catch (Exception e) {
             e.printStackTrace();

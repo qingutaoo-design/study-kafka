@@ -64,7 +64,7 @@ public class KafkaConfig {
     //改变partition只能扩展不能缩小
     @Bean
     public NewTopic newTopic(){
-        return new NewTopic("hello-topic2", 5, (short) 1);
+        return new NewTopic("hello-topic", 5, (short) 1);
     }
 
 }
