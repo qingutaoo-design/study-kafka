@@ -18,8 +18,6 @@ spring:
 #        key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: ${spring.kafka.producer.value-serializer}
       key-serializer: ${spring.kafka.producer.key-serializer}
-
-
 kafka:
   topic:
     name: hello-topic
