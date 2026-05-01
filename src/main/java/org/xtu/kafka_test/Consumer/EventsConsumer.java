@@ -127,6 +127,7 @@ public class EventsConsumer {
         }
     }
 
+    //要使用自己的拦截器，必须指定容器工厂
     @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}" ,containerFactory = "kafkaListenerContainerFactory")
     public void onEvent7(String Event) {
             //得转变json格式为对象
