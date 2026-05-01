@@ -3,6 +3,8 @@ package org.xtu.kafka_test.Consumer;
 import cn.hutool.json.JSONUtil;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.PartitionOffset;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -66,7 +68,7 @@ public class EventsConsumer {
      */
     //手动提交offset,默认是自动提交的，如果消费者在处理消息时发生异常，可能会导致消息丢失，因为offset已经提交了，
     // 但是消息还没有被处理完，所以可以通过手动提交offset来解决这个问题
-    @KafkaListener(topics = "${kafka.topic.name}", groupId = "${kafka.consumer.group-id}")
+//    @KafkaListener(topics = "${kafka.topic.name}", groupId = "${kafka.consumer.group-id}")
     public void onEvent4(String Event,
                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                          @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
@@ -77,6 +79,28 @@ public class EventsConsumer {
             System.out.println("Received event4(user): " + user);
             System.out.println("topic: " + topic + ", partition: " + partition);
             System.out.println("ConsumerRecord: " + consumerRecord.toString());
+            ack.acknowledge();//手动ack，提交offset
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @KafkaListener(groupId = "${kafka.consumer.group-id}",
+    topicPartitions = {
+            @TopicPartition(topic = "${kafka.topic.name}",
+            partitions = {"0","1","2"},
+            partitionOffsets = {
+                    //指定分区的初始offset，默认是latest,不受消费者组offset的影响，每次重启消费者都会从指定的offset开始消费
+                    @PartitionOffset(partition = "3", initialOffset = "2"),
+                    @PartitionOffset(partition = "4", initialOffset = "2")
+            })
+    })
+    public void onEvent5(String Event,
+                         @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                         Acknowledgment ack) {
+        try {
+            User user = JSONUtil.toBean(Event, User.class);
+            System.out.println("Received event5(user): " + user);
             ack.acknowledge();//手动ack，提交offset
         } catch (Exception e) {
             e.printStackTrace();

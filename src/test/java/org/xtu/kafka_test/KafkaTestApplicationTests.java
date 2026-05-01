@@ -55,5 +55,10 @@ class KafkaTestApplicationTests {
         void testMessage9 () {
             eventsProducer.sendMessage9();
         }
+    @Test
+    void testMessage10 () {
+        eventsProducer.sendMessage10();
+    }
+
 }
 

@@ -7,6 +7,7 @@ spring:
     bootstrap-servers: ${spring.kafka.bootstrap-servers}
     #?????
     consumer:
+      #默认消费最新消息，如果没有这个配置，默认是latest
       auto-offset-reset: ${spring.kafka.consumer.auto-offset-reset}
 
     #?????
@@ -23,6 +24,6 @@ kafka:
   topic:
     name: hello-topic
   consumer:
-    group-id: helloGroup
+    group-id: helloGroup3
 
 

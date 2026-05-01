@@ -40,8 +40,10 @@ public class KafkaConfig {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,keySerializer);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,valueSerializer);
-        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RoundRobinPartitioner.class);
-        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, kafkaInterceptor.getClass().getName());
+        //指定分区器为RoundRobinPartitioner,轮询分区策略,默认是DefaultPartitioner,根据key的hash值进行分区
+//        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RoundRobinPartitioner.class);
+        //添加自定义拦截器
+//        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, kafkaInterceptor.getClass().getName());
         return props;
     }
 
@@ -62,7 +64,7 @@ public class KafkaConfig {
     //改变partition只能扩展不能缩小
     @Bean
     public NewTopic newTopic(){
-        return new NewTopic("hello-topic2", 9, (short) 1);
+        return new NewTopic("hello-topic2", 5, (short) 1);
     }
 
 }

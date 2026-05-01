@@ -14,5 +14,5 @@ public class User {
     private String name;
     private int age;
     private String phone;
-
+    private int id;
 }
