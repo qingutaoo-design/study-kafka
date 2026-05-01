@@ -122,7 +122,7 @@ public class EventsProducer {
 
         String userJSON = JSONUtil.toJsonStr(user);
 
-        kafkaTemplate.send("hello-topic",userJSON);
+        kafkaTemplate.send("hello-topic3",userJSON);
 
     }
 

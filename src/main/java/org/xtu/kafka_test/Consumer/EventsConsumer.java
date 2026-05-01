@@ -98,7 +98,7 @@ public class EventsConsumer {
 //                    @PartitionOffset(partition = "4", initialOffset = "2")
 //            })
 //    })
-    public void onEvent5(String Event,
+    public void onEvent5(@Payload String Event,
                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                          Acknowledgment ack) {
         try {
@@ -110,7 +110,7 @@ public class EventsConsumer {
         }
     }
 
-    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}")
+//    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}")
     public void onEvent6(List<ConsumerRecord<String,String>> Events, Acknowledgment ack) {
         try {
             List<User> collect = Events.stream().map(Event -> {
@@ -125,6 +125,14 @@ public class EventsConsumer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}" ,containerFactory = "kafkaListenerContainerFactory")
+    public void onEvent7(String Event) {
+            //得转变json格式为对象
+            User bean = JSONUtil.toBean(Event, User.class);
+            System.out.println( "消费记录：" + bean);
+
     }
 
 }

@@ -1,23 +1,20 @@
 package org.xtu.kafka_test.Configuration;
 
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.RoundRobinPartitioner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.xtu.kafka_test.Interceptor.KafkaInterceptor;
+import org.xtu.kafka_test.Interceptor.ProducerInterceptor;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class KafkaConfig {
+public class ProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -28,7 +25,7 @@ public class KafkaConfig {
 
 
     @Autowired
-    private KafkaInterceptor kafkaInterceptor;
+    private ProducerInterceptor producerInterceptor;
 
     /**
      * 生产者配置
@@ -37,9 +34,9 @@ public class KafkaConfig {
      */
     public Map<String , Object> producerConfigs(){
         HashMap<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,keySerializer);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,valueSerializer);
+        props.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,keySerializer);
+        props.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,valueSerializer);
         //指定分区器为RoundRobinPartitioner,轮询分区策略,默认是DefaultPartitioner,根据key的hash值进行分区
 //        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RoundRobinPartitioner.class);
         //添加自定义拦截器

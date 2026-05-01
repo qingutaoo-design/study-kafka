@@ -1,6 +1,5 @@
 package org.xtu.kafka_test.Interceptor;
 
-import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.stereotype.Component;
@@ -8,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class KafkaInterceptor implements ProducerInterceptor<String,Object> {
+public class ProducerInterceptor implements org.apache.kafka.clients.producer.ProducerInterceptor<String,Object> {
     @Override
     public ProducerRecord<String, Object> onSend(ProducerRecord<String, Object> producerRecord) {
 
