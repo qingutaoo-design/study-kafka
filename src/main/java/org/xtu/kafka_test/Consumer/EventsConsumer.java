@@ -27,13 +27,27 @@ public class EventsConsumer {
 
     }
 
-    @KafkaListener(topics = "hello-topic", groupId = "helloGroup")
+//    @KafkaListener(topics = "hello-topic", groupId = "helloGroup")
     public void onEvent2(String Event,
                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                          @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
                          ConsumerRecord consumerRecord) {
         User user = JSONUtil.toBean(Event, User.class);
         System.out.println("Received event(user): " + user);
+
+        System.out.println("topic: " + topic + ", partition: " + partition);
+
+        System.out.println("ConsumerRecord: " + consumerRecord.toString());
+
+    }
+
+    @KafkaListener(topics = "${kafka.topic.name}", groupId = "${kafka.consumer.group-id}")
+    public void onEvent3(String Event,
+                         @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                         @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
+                         ConsumerRecord consumerRecord) {
+        User user = JSONUtil.toBean(Event, User.class);
+        System.out.println("Received event3(user): " + user);
 
         System.out.println("topic: " + topic + ", partition: " + partition);
 
