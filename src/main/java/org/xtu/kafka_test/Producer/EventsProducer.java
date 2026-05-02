@@ -134,6 +134,14 @@ public class EventsProducer {
             //指定key，根据key的hash值进行分区
             kafkaTemplate.send("hello-topic2","" + i,userJSON);
         }
+    }
+
+    public void sendMessage11(){
+        User user = User.builder().age(18).name("xtu").phone("123456789").build();
+
+        String userJSON = JSONUtil.toJsonStr(user);
+
+        kafkaTemplate.send("TopicA",userJSON);
 
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 import org.xtu.kafka_test.Entity.User;
 
@@ -128,11 +129,29 @@ public class EventsConsumer {
     }
 
     //要使用自己的拦截器，必须指定容器工厂
-    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}" ,containerFactory = "kafkaListenerContainerFactory")
-    public void onEvent7(String Event) {
-            //得转变json格式为对象
-            User bean = JSONUtil.toBean(Event, User.class);
-            System.out.println( "消费记录：" + bean);
+//    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}" ,containerFactory = "kafkaListenerContainerFactory")
+//    public void onEvent7(String Event) {
+//            //得转变json格式为对象
+//            User bean = JSONUtil.toBean(Event, User.class);
+//            System.out.println( "消费记录：" + bean);
+//
+//    }
+
+    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}")
+    @SendTo("TopicB")
+    public String onEvent8(String Event,Acknowledgment ack) {
+        //得转变json格式为对象
+        User bean = JSONUtil.toBean(Event, User.class);
+        System.out.println( "消费记录A：" + bean);
+        ack.acknowledge();
+        return "消费记录B：" +bean.toString() + " from A";
+    }
+
+    @KafkaListener(groupId = "groupB" , topics = "TopicB")
+    @SendTo("TopicB")
+    public void onEvent9(String Event,Acknowledgment ack) {
+        System.out.println( "消费记录B：" + Event);
+        ack.acknowledge();
 
     }
 

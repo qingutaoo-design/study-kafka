@@ -12,7 +12,7 @@ import org.xtu.kafka_test.Interceptor.ConsumerIntercept;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
+//@Configuration
 public class ConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -41,7 +41,7 @@ public class ConsumerConfig {
      * 创建ConsumerFactory实例，设置消费者配置
      * @return
      */
-    @Bean
+//    @Bean
     public ConsumerFactory<String,String> consumerFactory(){
         return new org.springframework.kafka.core.DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
@@ -51,7 +51,7 @@ public class ConsumerConfig {
      * @param consumerFactory
      * @return
      */
-    @Bean
+//    @Bean
     public KafkaListenerContainerFactory<?> kafkaListenerContainerFactory(ConsumerFactory<String,String> consumerFactory){
         ConcurrentKafkaListenerContainerFactory<String, String> listenerContainerFactory = new ConcurrentKafkaListenerContainerFactory<>();
         listenerContainerFactory.setConsumerFactory(consumerFactory);

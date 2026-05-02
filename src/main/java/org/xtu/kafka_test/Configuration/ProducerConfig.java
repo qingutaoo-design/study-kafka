@@ -45,12 +45,12 @@ public class ProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String,Object> producerFactory() {
+    public ProducerFactory<Object, Object> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean(name = {"kafkaTemplate", "kafkaTemplate2"})
-    public KafkaTemplate<String , Object> kafkaTemplate() {
+    public KafkaTemplate<Object, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 

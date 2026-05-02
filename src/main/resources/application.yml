@@ -8,27 +8,27 @@ spring:
       type: single
     #      type: batch
 
-    bootstrap-servers: ${spring.kafka.bootstrap-servers}
+    bootstrap-servers: localhost:9094
     #?????
     #?????
     template:
-      default-topic: ${spring.kafka.template.default-topic}
+      default-topic: default-topic
     producer:
 #        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 #        key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: ${spring.kafka.producer.value-serializer}
-      key-serializer: ${spring.kafka.producer.key-serializer}
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       #设置监听一组的最大数
       max-poll-records: 20
         #默认消费最新消息，如果没有这个配置，默认是latest
-      auto-offset-reset: ${spring.kafka.consumer.auto-offset-reset}
-      key-deserializer: ${spring.kafka.consumer.key-deserializer}
-      value-deserializer: ${spring.kafka.consumer.value-deserializer}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 kafka:
   topic:
-    name: hello-topic3
+    name: TopicA
   consumer:
-    group-id: batchgroup2
+    group-id: groupA
 
 
