@@ -163,6 +163,12 @@ public class EventsConsumer {
 
     }
 
+    /**
+     * 测试消费者默认分区策略RangeAssignor
+     * @param Event
+     * @param ack
+     * @param consumerRecord
+     */
     @KafkaListener(groupId = "mygroup2" , topics = "hello-topic4" ,concurrency = "3")
     public void onEvent10(String Event,Acknowledgment ack,ConsumerRecord<Object,Object> consumerRecord) {
 
