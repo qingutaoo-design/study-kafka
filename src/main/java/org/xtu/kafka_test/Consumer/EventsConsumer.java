@@ -163,11 +163,11 @@ public class EventsConsumer {
 
     }
 
-    @KafkaListener(groupId = "mygroup" , topics = "hello-topic4" ,concurrency = "3")
-    public void onEvent10(String Event,Acknowledgment ack) {
+    @KafkaListener(groupId = "mygroup2" , topics = "hello-topic4" ,concurrency = "3")
+    public void onEvent10(String Event,Acknowledgment ack,ConsumerRecord<Object,Object> consumerRecord) {
 
         User bean = JSONUtil.toBean(Event, User.class);
-        System.out.println( Thread.currentThread().getId() + "消费记录：" + bean.toString());
+        System.out.println( Thread.currentThread().getId() + "消费记录：" + consumerRecord.toString());
         ack.acknowledge();
     }
 
