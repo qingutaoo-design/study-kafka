@@ -61,7 +61,7 @@ public class ProducerConfig {
     //改变partition只能扩展不能缩小
     @Bean
     public NewTopic newTopic(){
-        return new NewTopic("hello-topic4", 10, (short) 1);
+        return new NewTopic("hello-topic6", 10, (short) 1);
     }
 
 }

@@ -169,11 +169,24 @@ public class EventsConsumer {
      * @param ack
      * @param consumerRecord
      */
-    @KafkaListener(groupId = "mygroup2" , topics = "hello-topic4" ,concurrency = "3")
+//    @KafkaListener(groupId = "mygroup2" , topics = "hello-topic4" ,concurrency = "3")
     public void onEvent10(String Event,Acknowledgment ack,ConsumerRecord<Object,Object> consumerRecord) {
 
         User bean = JSONUtil.toBean(Event, User.class);
         System.out.println( Thread.currentThread().getId() + "消费记录：" + consumerRecord.toString());
+        ack.acknowledge();
+    }
+
+    /**
+     * 测试消费者分区策略RoundRobinAssignor
+     * @param Event
+     * @param ack
+     * @param consumerRecord
+     */
+    @KafkaListener(groupId = "mygroup2" , topics = "hello-topic6" ,concurrency = "3",containerFactory = "kafkaListenerContainerFactory2")
+    public void onEvent11(String Event,Acknowledgment ack,ConsumerRecord<Object,Object> consumerRecord) {
+        User bean = JSONUtil.toBean(Event, User.class);
+        System.out.println( Thread.currentThread().getId() + "消费记录：" + consumerRecord.toString() + bean);
         ack.acknowledge();
     }
 

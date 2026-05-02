@@ -6,13 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.listener.MessageListenerContainer;
-import org.xtu.kafka_test.Interceptor.ConsumerIntercept;
 
 import java.util.HashMap;
 import java.util.Map;
 
-//@Configuration
+@Configuration
 public class ConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -24,7 +22,7 @@ public class ConsumerConfig {
 
     /**
      * 自定义消费者工厂，会覆盖yml当中spring.kafka.consumer的配置
-     * @return
+     * @return 消费者配置映射
      */
     //当前消费者配置只能消费最新消息
     public Map<String , Object> consumerConfigs(){
@@ -32,29 +30,36 @@ public class ConsumerConfig {
         props.put(org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,keyDserializer);
         props.put(org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,valueDserializer);
+        props.put(org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
+        //指定消费者组的消费消息分区策略，RoundRonbinAssignor
+        props.put(org.apache.kafka.clients.consumer.ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG,
+                org.apache.kafka.clients.consumer.RoundRobinAssignor.class.getName());
+
 //        添加自定义拦截器
-        props.put(org.apache.kafka.clients.consumer.ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, ConsumerIntercept.class.getName());
+//        props.put(org.apache.kafka.clients.consumer.ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, ConsumerIntercept.class.getName());
         return props;
     }
 
     /**
      * 创建ConsumerFactory实例，设置消费者配置
-     * @return
+     * @return 消费者工厂
      */
-//    @Bean
+    @Bean
     public ConsumerFactory<String,String> consumerFactory(){
         return new org.springframework.kafka.core.DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
     /**
      * 创建KafkaListenerContainerFactory实例，设置ConsumerFactory
-     * @param consumerFactory
-     * @return
+     * @param consumerFactory 消费者工厂
+     * @return 监听器容器工厂
      */
-//    @Bean
-    public KafkaListenerContainerFactory<?> kafkaListenerContainerFactory(ConsumerFactory<String,String> consumerFactory){
+    @Bean
+    public KafkaListenerContainerFactory<?> kafkaListenerContainerFactory2(ConsumerFactory<String,String> consumerFactory){
         ConcurrentKafkaListenerContainerFactory<String, String> listenerContainerFactory = new ConcurrentKafkaListenerContainerFactory<>();
         listenerContainerFactory.setConsumerFactory(consumerFactory);
+        //设置手动提交偏移量，MANUAL_IMMEDIATE表示在消息处理完成后立即提交偏移量
+        listenerContainerFactory.getContainerProperties().setAckMode(org.springframework.kafka.listener.ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return listenerContainerFactory;
     }
 

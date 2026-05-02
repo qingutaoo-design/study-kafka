@@ -151,7 +151,7 @@ public class EventsProducer {
 
             String userJSON = JSONUtil.toJsonStr(user);
             //指定key，根据key的hash值进行分区
-            kafkaTemplate.send("hello-topic4","" + i,userJSON);
+            kafkaTemplate.send("hello-topic6","" + i,userJSON);
         }
     }
 }
