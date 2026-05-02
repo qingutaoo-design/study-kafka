@@ -137,6 +137,15 @@ public class EventsConsumer {
 //
 //    }
 
+    /**
+     * 消息转发
+     * 消费者A消费消息后，需要发送回复给消费者B，消费者B再消费这个回复消息
+     * 既然消费者A需要发送消息给消费者B，那就需要一个KafkaTemplate来发消息
+     * 在自动装配时，spring找不到需要的KafkaTemplate才导致的异常，所以修改了自定义为KafkaTemplate<Object, Object>让spring找到它
+     * @param Event
+     * @param ack
+     * @return
+     */
     @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}")
     @SendTo("TopicB")
     public String onEvent8(String Event,Acknowledgment ack) {
