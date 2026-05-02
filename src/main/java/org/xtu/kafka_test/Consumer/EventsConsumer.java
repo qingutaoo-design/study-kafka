@@ -146,8 +146,8 @@ public class EventsConsumer {
      * @param ack
      * @return
      */
-    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}")
-    @SendTo("TopicB")
+//    @KafkaListener(groupId = "${kafka.consumer.group-id}" , topics = "${kafka.topic.name}")
+//    @SendTo("TopicB")
     public String onEvent8(String Event,Acknowledgment ack) {
         //得转变json格式为对象
         User bean = JSONUtil.toBean(Event, User.class);
@@ -156,12 +156,19 @@ public class EventsConsumer {
         return "消费记录B：" +bean.toString() + " from A";
     }
 
-    @KafkaListener(groupId = "groupB" , topics = "TopicB")
-    @SendTo("TopicB")
+//    @KafkaListener(groupId = "groupB" , topics = "TopicB")
     public void onEvent9(String Event,Acknowledgment ack) {
         System.out.println( "消费记录B：" + Event);
         ack.acknowledge();
 
+    }
+
+    @KafkaListener(groupId = "mygroup" , topics = "hello-topic4" ,concurrency = "3")
+    public void onEvent10(String Event,Acknowledgment ack) {
+
+        User bean = JSONUtil.toBean(Event, User.class);
+        System.out.println( Thread.currentThread().getId() + "消费记录：" + bean.toString());
+        ack.acknowledge();
     }
 
 }
